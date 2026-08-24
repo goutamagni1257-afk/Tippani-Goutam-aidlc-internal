@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:h2:mem:audit-test;DB_CLOSE_DELAY=-1
-  sql:
-    init:
-      mode: always

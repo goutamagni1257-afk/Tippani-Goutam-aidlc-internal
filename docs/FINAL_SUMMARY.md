@@ -4,4 +4,4 @@ The prototype delivers a small, reviewable Spring Boot service for append-only a
 
 Validation is intended to cover context startup, append/query behavior, composed filters, pagination, chain verification, redaction, archive preservation, export structure, and direct database mutation. Current limits are lack of authentication, signed exports, external hash anchoring, scheduled retention jobs, operational metrics, and a production database migration strategy.
 
-Before submission: fill in `ATTESTATION.md`, add integration tests for the required flows, run the quality gates, and commit the development history under the candidate's own identity.
+Before submission: run `mvn test` and the Docker build in an environment with Maven, JDK, and Docker installed, review the documented production limits, and complete the engineer sign-off in `ATTESTATION.md`.

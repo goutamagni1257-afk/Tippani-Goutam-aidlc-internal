@@ -22,11 +22,17 @@ public class AuditController {
     @GetMapping
     public List<EventResponse> query(@RequestParam(required=false) String actorId, @RequestParam(required=false) String resourceType, @RequestParam(required=false) String resourceId, @RequestParam(required=false) String eventType, @RequestParam(required=false) OffsetDateTime from, @RequestParam(required=false) OffsetDateTime to, @RequestParam(defaultValue="0") int page, @RequestParam(defaultValue="50") int size) {
         if (page < 0 || size < 1 || size > 500) throw new IllegalArgumentException("page must be non-negative and size must be between 1 and 500");
+        try { Math.multiplyExact(page, size); } catch (ArithmeticException e) { throw new IllegalArgumentException("page is too large", e); }
         return service.query(actorId, resourceType, resourceId, eventType, from, to, page, size);
     }
 
     @GetMapping("/verify")
     public Map<String,Object> verify() { return service.verify(); }
+
+    @GetMapping("/health")
+    public Map<String, Object> health() {
+        return Collections.<String, Object>singletonMap("status", "UP");
+    }
 
     @PostMapping("/{id}/redact")
     public EventResponse redact(@PathVariable long id, @RequestBody Set<String> fields) { return service.redact(id, fields); }
@@ -42,7 +48,10 @@ public class AuditController {
         Map<String, Object> bundle = new LinkedHashMap<>();
         bundle.put("format", "audit-chain-bundle-v1");
         bundle.put("genesis", "GENESIS");
-        bundle.put("filter", actorId != null ? Collections.singletonMap("actorId", actorId) : Collections.singletonMap("resourceId", resourceId));
+        Map<String, String> filter = new LinkedHashMap<>();
+        if (actorId != null) filter.put("actorId", actorId);
+        if (resourceId != null) filter.put("resourceId", resourceId);
+        bundle.put("filter", filter);
         bundle.put("records", records);
         bundle.put("verificationNote", "Verify each contentHash from the canonical event fields and check previousHash links; the first record's previousHash is the external chain boundary.");
         return bundle;

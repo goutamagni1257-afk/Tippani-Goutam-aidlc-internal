@@ -2,7 +2,7 @@
 
 ## Track
 
-`ai-agentic` project track. The implementation is based on the audit-log service baseline; track-specific requirements should be added here when provided.
+`GoutamTippani_ai_proficient` project track. The implementation is based on the audit-log service baseline; track-specific requirements should be added here when provided.
 
 Java/Spring Boot prototype for the audit-log assignment. The service stores append-only events in an embedded H2 database, calculates a SHA-256 hash chain, supports querying and verification, and includes the retention, redaction, export, and compliance-reporting slices required by the assessment.
 
